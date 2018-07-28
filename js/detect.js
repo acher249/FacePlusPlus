@@ -5,7 +5,7 @@
     'use strict';
 
     // constants
-    var API_URL = 'https://api-cn.faceplusplus.com/facepp/v3';
+    var API_URL = 'https://api-us.faceplusplus.com/facepp/v3';
     var API_KEY = 'MgfOZx5IZCuocbZ5wMmKCdZkd7P0mPhs';//填写你的APIKey
     var API_SECRET = 'ymFeQjguF6lGA8oLlneuAHMtdhq1QSA0';//填写你的APISecret
 
@@ -303,7 +303,7 @@
 
                             var modalClose = function() {
                                 $(video).hide();
-                                localMediaStream.stop();
+                                // localMediaStream.stop();
                                 cameraModal.hide();
                                 container.find('.capture').hide();
                                 cameraModal.unbind('click');
@@ -312,7 +312,7 @@
 
                             video.src = window.URL.createObjectURL(localMediaStream);
                             video.onerror = function() {
-                                localMediaStream.stop();
+                                // localMediaStream.stop();
                                 modalClose();
                             };
 
@@ -330,6 +330,7 @@
 
                                     detect(tmpCanvas.toDataURL('image/jpeg'), true);
                                     modalClose();
+                                    localstream.getTracks()[0].stop();
                                     return false;
                                 });
 
