@@ -303,7 +303,7 @@
 
                             var modalClose = function() {
                                 $(video).hide();
-                                // localMediaStream.stop();
+                                localMediaStream.getTracks()[0].stop()
                                 cameraModal.hide();
                                 container.find('.capture').hide();
                                 cameraModal.unbind('click');
@@ -312,7 +312,7 @@
 
                             video.src = window.URL.createObjectURL(localMediaStream);
                             video.onerror = function() {
-                                // localMediaStream.stop();
+                                localMediaStream.getTracks()[0].stop()
                                 modalClose();
                             };
 
@@ -330,7 +330,10 @@
 
                                     detect(tmpCanvas.toDataURL('image/jpeg'), true);
                                     modalClose();
-                                    localstream.getTracks()[0].stop();
+                                    console.log("Clicked the camera button");
+                                    // localstream.getTracks()[0].stop();
+                                    // var track = stream.getTracks()[0];  
+                                    // track.stop();
                                     return false;
                                 });
 
@@ -415,7 +418,8 @@
             fd.append('api_key', API_KEY);
             fd.append('api_secret', API_SECRET);
             fd.append('return_landmark', 1);
-            fd.append('return_attributes', 'gender,age,headpose');
+            //RETURN ATTRIBUTES
+            fd.append('return_attributes', 'gender,age,headpose,eyestatus,emotion,beauty,ethnicity');
             if (options.type === 'dataURI') {
                 xhr.open('POST', API_URL + '/detect');
                 fd.append('image_file', dataURItoBlob(options.img));
