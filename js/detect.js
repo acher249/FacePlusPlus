@@ -419,7 +419,8 @@
             fd.append('api_secret', API_SECRET);
             fd.append('return_landmark', 1);
             //RETURN ATTRIBUTES
-            fd.append('return_attributes', 'gender,age,headpose,eyestatus,emotion,beauty,ethnicity');
+            // fd.append('return_attributes', 'gender,age,headpose,eyestatus,emotion,beauty,ethnicity');
+            fd.append('return_attributes', 'gender,age,headpose,emotion');
             if (options.type === 'dataURI') {
                 xhr.open('POST', API_URL + '/detect');
                 fd.append('image_file', dataURItoBlob(options.img));
