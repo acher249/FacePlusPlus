@@ -9,6 +9,16 @@
     var API_KEY = 'MgfOZx5IZCuocbZ5wMmKCdZkd7P0mPhs';//填写你的APIKey
     var API_SECRET = 'ymFeQjguF6lGA8oLlneuAHMtdhq1QSA0';//填写你的APISecret
 
+    //Global Variables for Emoitions
+
+    var happiness = 0.0;
+    var sadness = 0.0;
+    var fear = 0.0;
+    var anger = 0.0;
+    var disgust = 0.0;
+    var surprise = 0.0;
+
+
     // error messages
     var messages = {
         URL_ERROR:   'Invalid URL',
@@ -237,6 +247,29 @@
                             showStatus(url);
 
                             var json = JSON.stringify(faces, null, '  ');
+                            var resultObject = JSON.parse(json);
+                            // console.log(resultObject);
+                            // console.log(resultObject.faces["0"].attributes.emotion);
+
+                            // GET EMOTION VALUES*******************************************
+                            //**************************************************************
+                            happiness = resultObject.faces["0"].attributes.emotion.happiness;
+                            sadness = resultObject.faces["0"].attributes.emotion.sadness;
+                            fear = resultObject.faces["0"].attributes.emotion.fear;
+                            anger = resultObject.faces["0"].attributes.emotion.anger;
+                            disgust = resultObject.faces["0"].attributes.emotion.disgust;
+                            surprise = resultObject.faces["0"].attributes.emotion.surprise;
+
+                            console.log("happiness: " + happiness);
+                            console.log("sadness: " + sadness);
+                            console.log("fear: " + fear);
+                            console.log("anger: " + anger);
+                            console.log("disgust: " + disgust);
+                            console.log("surprise: " + surprise);
+
+                            //**************************************************************
+                            //**************************************************************
+
                             try {
                                 // highlight json for "Response JSON"
                                 Rainbow.color(json, 'javascript', function(html) {
@@ -247,6 +280,7 @@
                             }
 
                             drawFaces(imageInfo, faces.faces);
+                            // console.log(imageInfo);
                         }
                     },
                     error: function() {
@@ -403,6 +437,8 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
+                        //THIS IS GIVING RESPONSE IN STRING NOT OBJECT
+                        // console.log(xhr);
                         options.success(JSON.parse(xhr.responseText));
                     } else {
                         options.error();
@@ -442,6 +478,7 @@
                     error: options.error,
                     timeout: 10 * 1000
                 });
+                // console.log(options.success);
             } else {
                 options.error();
             }
