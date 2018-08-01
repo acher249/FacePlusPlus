@@ -18,6 +18,16 @@
     var disgust = 0.0;
     var surprise = 0.0;
 
+    //Get HTML Objects
+    var happinessHTML = $(".happiness");
+    var sadnessHTML = $(".sadness");
+    var fearHTML = $(".fear");
+    var angerHTML = $(".anger");
+    var disgustHTML = $(".disgust");
+    var surpriseHTML = $(".surprise");
+
+    
+
 
     // error messages
     var messages = {
@@ -266,6 +276,14 @@
                             console.log("anger: " + anger);
                             console.log("disgust: " + disgust);
                             console.log("surprise: " + surprise);
+
+                            //HTML object defined at top
+                            happinessHTML.text("happiness: " + happiness);
+                            sadnessHTML.text("sadness: " + sadness);
+                            fearHTML.text("fear: " + fear);
+                            angerHTML.text("anger: " + anger);
+                            disgustHTML.text("disgust: " + disgust);
+                            surpriseHTML.text("surprise: " + surprise);
 
                             //**************************************************************
                             //**************************************************************
