@@ -332,7 +332,7 @@
                                     modalClose();
                                     console.log("Clicked the camera button");
                                     // localstream.getTracks()[0].stop();
-                                    // var track = stream.getTracks()[0];  
+                                    // var track = localstream.getTracks()[0];  
                                     // track.stop();
                                     return false;
                                 });
