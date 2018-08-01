@@ -26,8 +26,7 @@
     var disgustHTML = $(".disgust");
     var surpriseHTML = $(".surprise");
 
-    
-
+    var mainEmotionHTML = $(".mainEmotionLabel");
 
     // error messages
     var messages = {
@@ -261,6 +260,7 @@
                             // console.log(resultObject);
                             // console.log(resultObject.faces["0"].attributes.emotion);
 
+
                             // GET EMOTION VALUES*******************************************
                             //**************************************************************
                             happiness = resultObject.faces["0"].attributes.emotion.happiness;
@@ -270,14 +270,15 @@
                             disgust = resultObject.faces["0"].attributes.emotion.disgust;
                             surprise = resultObject.faces["0"].attributes.emotion.surprise;
 
-                            console.log("happiness: " + happiness);
-                            console.log("sadness: " + sadness);
-                            console.log("fear: " + fear);
-                            console.log("anger: " + anger);
-                            console.log("disgust: " + disgust);
-                            console.log("surprise: " + surprise);
+                            // console.log("happiness: " + happiness);
+                            // console.log("sadness: " + sadness);
+                            // console.log("fear: " + fear);
+                            // console.log("anger: " + anger);
+                            // console.log("disgust: " + disgust);
+                            // console.log("surprise: " + surprise);
 
-                            //HTML object defined at top
+                            // HTML object defined at top
+                            // Also add class of data number
                             happinessHTML.text("happiness: " + happiness);
                             sadnessHTML.text("sadness: " + sadness);
                             fearHTML.text("fear: " + fear);
@@ -288,6 +289,44 @@
                             //**************************************************************
                             //**************************************************************
 
+                            //Get Main Emotion (with highest value)
+                            var emotionArray = new Array(happiness, sadness, fear, anger, disgust, surprise);
+                            // console.log(emotionArray);
+
+                            emotionArray.sort(function(a, b){return b-a});
+                            // console.log("sorted: " + emotionArray);
+                            // console.log("**************************");
+                            var mainEmotionValue = emotionArray[0];
+                            var mainEmotion = "";
+                            
+                            //Find Which is the Main Emotion
+                            if (happinessHTML.text().includes(mainEmotionValue)){
+                                mainEmotion = "happiness";
+                            } 
+                            else if (sadnessHTML.text().includes(mainEmotionValue)) {
+                                mainEmotion = "sadness";
+                            }
+                            else if (fearHTML.text().includes(mainEmotionValue)) {
+                                mainEmotion = "fear";
+                            }
+                            else if (angerHTML.text().includes(mainEmotionValue)) {
+                                mainEmotion = "anger";
+                            }
+                            else if (disgustHTML.text().includes(mainEmotionValue)) {
+                                mainEmotion = "disgust";
+                            }
+                            else if (surpriseHTML.text().includes(mainEmotionValue)) {
+                                mainEmotion = "surprise";
+                            }
+
+                            console.log("Main Emotion Is: " + mainEmotion);
+                            console.log("Main Emotion Value: " + mainEmotionValue);
+                            var mainEmotionAllCaps = mainEmotion.toUpperCase();
+
+                            mainEmotionHTML.text("Your Main Emotion is: " + mainEmotionAllCaps);
+
+
+                            //****************************************************************
                             try {
                                 // highlight json for "Response JSON"
                                 Rainbow.color(json, 'javascript', function(html) {
@@ -503,6 +542,7 @@
         }
     }
 
+    //Floating Action Button JS
     document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.fixed-action-btn');
     var instances = M.FloatingActionButton.init(elems, {
