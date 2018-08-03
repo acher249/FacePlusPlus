@@ -628,6 +628,8 @@
         var task = storageRef.put(blob);
 
     }
+
+    //now try and download the images that you pushed to the db.
     
     //#region  Need this function but not doing anything..
     $(function() {
