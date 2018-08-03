@@ -1,6 +1,3 @@
-/*jshint curly: true, eqeqeq: true, latedef: true, undef: true, quotmark: single,
-  unused: true, browser: true, jquery: true */
-/*global Rainbow:true */
 (function() {
     'use strict';
 
@@ -17,6 +14,11 @@
     var anger = 0.0;
     var disgust = 0.0;
     var surprise = 0.0;
+
+    var photoCounter = 0;
+
+    var image64;
+    var blob;
 
     //Get HTML Objects
     var happinessHTML = $(".happiness");
@@ -36,6 +38,26 @@
         NO_FACE:     'No face detected',
         NO_CAMERA:   'No camera available'
     };
+
+    //Firebase
+    //********************************************************************** */
+    //********************************************************************** */
+
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAJL8x08SRMEYMMtn13bD69hZHjWZC_zmM",
+        authDomain: "mud-4e9fe.firebaseapp.com",
+        databaseURL: "https://mud-4e9fe.firebaseio.com",
+        projectId: "mud-4e9fe",
+        storageBucket: "mud-4e9fe.appspot.com",
+        messagingSenderId: "350533286927"
+    };
+    firebase.initializeApp(config);
+
+    //********************************************************************** */
+    //********************************************************************** */
+
+    //#region Face++ Code
 
     // vendor prefix
     window.URL = window.URL || window.webkitURL;
@@ -222,6 +244,8 @@
                 return;
             }
 
+            //#endregion
+
             var currentImageCount = ++totalImageCount;
 
             startLoading();
@@ -261,7 +285,7 @@
                             // console.log(resultObject.faces["0"].attributes.emotion);
 
 
-                            // GET EMOTION VALUES*******************************************
+                            // GET EMOTION VALUES *******************************************
                             //**************************************************************
                             happiness = resultObject.faces["0"].attributes.emotion.happiness;
                             sadness = resultObject.faces["0"].attributes.emotion.sadness;
@@ -325,7 +349,7 @@
 
                             mainEmotionHTML.text("Your Main Emotion is: " + mainEmotionAllCaps);
 
-
+                            //****************************************************************
                             //****************************************************************
                             try {
                                 // highlight json for "Response JSON"
@@ -359,6 +383,7 @@
             currentImg.src = src;
         }
 
+        //#region Face++ Code
         // ==================== INPUT ======================
 
         // URL Input
@@ -503,20 +528,59 @@
                 }
             };
 
+            //#endregion
+
+
             var fd = new FormData();
             fd.append('api_key', API_KEY);
             fd.append('api_secret', API_SECRET);
             fd.append('return_landmark', 1);
-            //RETURN ATTRIBUTES
-            // fd.append('return_attributes', 'gender,age,headpose,eyestatus,emotion,beauty,ethnicity');
+            //RETURN ATTRIBUTES ***********************************************/
             fd.append('return_attributes', 'gender,age,headpose,emotion');
             if (options.type === 'dataURI') {
                 xhr.open('POST', API_URL + '/detect');
                 fd.append('image_file', dataURItoBlob(options.img));
+                //**************************************************************/
+                //GET IMAGE TO THROW INTO STORAGE DB - base64
+                image64 = options.img;
+                console.log(image64);
+
+                var byteNumbers = new Array(image64.length);
+                for (var i = 0; i < image64.length; i++) {
+                    byteNumbers[i] = image64.charCodeAt(i);
+                }
+        
+                var byteArray = new Uint8Array(byteNumbers);
+                var contentType = 'image/png';
+
+                blob = new Blob([byteArray], {type: contentType});
+                console.log(blob);
+
+                sendPicToDB();
+                photoCounter++;
+
                 xhr.send(fd);
             }else if (options.type === 'url') {
                 xhr.open('POST', API_URL + '/detect');
                 fd.append('image_url', options.img);
+                //**************************************************************/
+                //GET IMAGE TO THROW INTO STORAGE DB - base64
+                image64 = options.img;
+
+                var byteNumbers = new Array(image64.length);
+                for (var i = 0; i < image64.length; i++) {
+                    byteNumbers[i] = image64.charCodeAt(i);
+                }
+        
+                var byteArray = new Uint8Array(byteNumbers);
+                var contentType = 'image/png';
+
+                blob = new Blob([byteArray], {type: contentType});
+                console.log(blob);
+
+                sendPicToDB();
+                photoCounter++;
+
                 xhr.send(fd);
             } else {
                 options.error();
@@ -545,14 +609,26 @@
     //Floating Action Button JS
     document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.fixed-action-btn');
-    var instances = M.FloatingActionButton.init(elems, {
-        direction: 'left'
-    });
+        var instances = M.FloatingActionButton.init(elems, {
+            direction: 'left'
+        });
     });
 
+    function sendPicToDB(){
+
+        //Get file
+        // blob = blob;
+        // var file = imageFile;
+
+        //Create Storage Ref --- give it a file name
+        var storageRef = firebase.storage().ref("Emotion Photos/" + ("Adam_Image" + photoCounter));
+
+        //Upload a File
+        var task = storageRef.put(blob);
+
+    }
     
-    
-    // Need this function but not doing anything..
+    //#region  Need this function but not doing anything..
     $(function() {
         makeDetector(document.getElementById('detector'), {
             imgs: [
@@ -563,5 +639,7 @@
             ]
         });
     });
+
+    //#endregion
 
 })();
