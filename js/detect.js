@@ -551,7 +551,7 @@
                 }
         
                 var byteArray = new Uint8Array(byteNumbers);
-                var contentType = 'image/png';
+                var contentType = 'jpg';
 
                 blob = new Blob([byteArray], {type: contentType});
                 console.log(blob);
@@ -566,6 +566,7 @@
                 //**************************************************************/
                 //GET IMAGE TO THROW INTO STORAGE DB - base64
                 image64 = options.img;
+                console.log(image64);
 
                 var byteNumbers = new Array(image64.length);
                 for (var i = 0; i < image64.length; i++) {
@@ -573,7 +574,7 @@
                 }
         
                 var byteArray = new Uint8Array(byteNumbers);
-                var contentType = 'image/png';
+                var contentType = 'jpg';
 
                 blob = new Blob([byteArray], {type: contentType});
                 console.log(blob);
