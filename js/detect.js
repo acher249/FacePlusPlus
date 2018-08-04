@@ -558,6 +558,7 @@
 
                 sendPicToDB();
                 photoCounter++;
+                getPicFromDB();
 
                 xhr.send(fd);
             }else if (options.type === 'url') {
@@ -581,6 +582,7 @@
 
                 sendPicToDB();
                 photoCounter++;
+                getPicFromDB();
 
                 xhr.send(fd);
             } else {
@@ -617,10 +619,6 @@
 
     function sendPicToDB(){
 
-        //Get file
-        // blob = blob;
-        // var file = imageFile;
-
         //Create Storage Ref --- give it a file name
         var storageRef = firebase.storage().ref("Emotion Photos/" + ("Adam_Image" + photoCounter));
 
@@ -630,6 +628,37 @@
     }
 
     //now try and download the images that you pushed to the db.
+
+    function getPicFromDB(){
+
+        var storage = firebase.storage();
+        
+        // Create a storage reference from our storage service
+        var storageRef = storage.ref();
+        // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
+
+        //download URL
+        // var gsReference = storage.refFromURL('gs://mud-4e9fe.appspot.com/Emotion Photos/Adam_Image3')
+
+        storageRef.child('Emotion Photos/Adam_Image0').getDownloadURL().then(function(url) {
+           
+            // This can be downloaded directly:
+            var xhrFirebase = new XMLHttpRequest();
+            xhrFirebase.responseType = 'blob';
+            xhrFirebase.onload = function(event) {
+                var blob = xhrFirebase.response;
+            };
+            xhrFirebase.open('GET', url);
+            xhrFirebase.send();
+            
+            // Or inserted into an <img> element:
+            var img = document.getElementById('myimg');
+            img.src = url;
+        }).catch(function(error) {
+        // Handle any errors
+        });
+
+    }
     
     //#region  Need this function but not doing anything..
     $(function() {
