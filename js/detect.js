@@ -565,25 +565,8 @@
             }else if (options.type === 'url') {
                 xhr.open('POST', API_URL + '/detect');
                 fd.append('image_url', options.img);
-                //**************************************************************/
-                //GET IMAGE TO THROW INTO STORAGE DB - base64
-                image64 = options.img;
-                // console.log(image64);
 
-                var byteNumbers = new Array(image64.length);
-                for (var i = 0; i < image64.length; i++) {
-                    byteNumbers[i] = image64.charCodeAt(i);
-                }
-        
-                var byteArray = new Uint8Array(byteNumbers);
-                var contentType = 'jpg';
-
-                blob = new Blob([byteArray], {type: contentType});
-                // console.log(blob);
-
-                sendPicToDB();
-                photoCounter++;
-                getPicFromDB();
+                // never gets in here
 
                 xhr.send(fd);
             } else {
@@ -603,7 +586,6 @@
                     error: options.error,
                     timeout: 10 * 1000
                 });
-                // console.log(options.success);
             } else {
                 options.error();
             }
@@ -628,8 +610,6 @@
 
     }
 
-    //now try and download the images that you pushed to the db.
-
     function getPicFromDB(){
 
         var storage = firebase.storage();
@@ -638,21 +618,20 @@
         var storageRef = storage.ref();
         // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
 
-        //download URL
-        // var gsReference = storage.refFromURL('gs://mud-4e9fe.appspot.com/Emotion Photos/Adam_Image3')
-
         storageRef.child('Emotion Photos/Adam_Image0').getDownloadURL().then(function(url) {
             var responseBase64;
 
-            // This can be downloaded directly:
             var xhrFirebase = new XMLHttpRequest();
             //want to get text back not a blob
             xhrFirebase.responseType = 'text';
             xhrFirebase.onload = function(event) {
+                //This is the base64 string back from the db
                 responseBase64 = xhrFirebase.response;
-                console.log(responseBase64);
+                // console.log(responseBase64);
 
-                //ADD base64 from Database to HTML HERE*****
+                // ADD base64 from Database to HTML HERE*****
+                // This is a sequence issue.. image will be undefined 
+                // if you do not wait until you get back the base 64 from the db
                 var img = document.getElementById('myimg');
                 img.src = responseBase64;
             };
