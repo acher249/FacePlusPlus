@@ -543,7 +543,7 @@
                 //**************************************************************/
                 //GET IMAGE TO THROW INTO STORAGE DB - base64
                 image64 = options.img;
-                console.log(image64);
+                // console.log(image64);
 
                 var byteNumbers = new Array(image64.length);
                 for (var i = 0; i < image64.length; i++) {
@@ -554,7 +554,7 @@
                 var contentType = 'jpg';
 
                 blob = new Blob([byteArray], {type: contentType});
-                console.log(blob);
+                // console.log(blob);
 
                 sendPicToDB();
                 photoCounter++;
@@ -567,7 +567,7 @@
                 //**************************************************************/
                 //GET IMAGE TO THROW INTO STORAGE DB - base64
                 image64 = options.img;
-                console.log(image64);
+                // console.log(image64);
 
                 var byteNumbers = new Array(image64.length);
                 for (var i = 0; i < image64.length; i++) {
@@ -578,7 +578,7 @@
                 var contentType = 'jpg';
 
                 blob = new Blob([byteArray], {type: contentType});
-                console.log(blob);
+                // console.log(blob);
 
                 sendPicToDB();
                 photoCounter++;
@@ -632,7 +632,7 @@
     function getPicFromDB(){
 
         var storage = firebase.storage();
-        
+
         // Create a storage reference from our storage service
         var storageRef = storage.ref();
         // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
@@ -641,19 +641,24 @@
         // var gsReference = storage.refFromURL('gs://mud-4e9fe.appspot.com/Emotion Photos/Adam_Image3')
 
         storageRef.child('Emotion Photos/Adam_Image0').getDownloadURL().then(function(url) {
-           
+            var responseBase64;
+
             // This can be downloaded directly:
             var xhrFirebase = new XMLHttpRequest();
-            xhrFirebase.responseType = 'blob';
+            xhrFirebase.responseType = 'text';
             xhrFirebase.onload = function(event) {
-                var blob = xhrFirebase.response;
+                responseBase64 = xhrFirebase.response;
+                console.log(responseBase64);
             };
             xhrFirebase.open('GET', url);
             xhrFirebase.send();
+
+            // var decodedData = atob(responseBase64);
+            // console.log(decodedData);
             
             // Or inserted into an <img> element:
             var img = document.getElementById('myimg');
-            img.src = url;
+            img.src = decodedData;
         }).catch(function(error) {
         // Handle any errors
         });
