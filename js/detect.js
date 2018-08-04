@@ -558,9 +558,10 @@
 
                 sendPicToDB();
                 photoCounter++;
+                xhr.send(fd);
+
                 getPicFromDB();
 
-                xhr.send(fd);
             }else if (options.type === 'url') {
                 xhr.open('POST', API_URL + '/detect');
                 fd.append('image_url', options.img);
@@ -645,20 +646,19 @@
 
             // This can be downloaded directly:
             var xhrFirebase = new XMLHttpRequest();
+            //want to get text back not a blob
             xhrFirebase.responseType = 'text';
             xhrFirebase.onload = function(event) {
                 responseBase64 = xhrFirebase.response;
                 console.log(responseBase64);
+
+                //ADD base64 from Database to HTML HERE*****
+                var img = document.getElementById('myimg');
+                img.src = responseBase64;
             };
             xhrFirebase.open('GET', url);
             xhrFirebase.send();
 
-            // var decodedData = atob(responseBase64);
-            // console.log(decodedData);
-            
-            // Or inserted into an <img> element:
-            var img = document.getElementById('myimg');
-            img.src = decodedData;
         }).catch(function(error) {
         // Handle any errors
         });
