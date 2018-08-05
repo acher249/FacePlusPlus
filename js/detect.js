@@ -281,6 +281,7 @@
 
                             var json = JSON.stringify(faces, null, '  ');
                             var resultObject = JSON.parse(json);
+                            //THIS IS THE ENTIRE OBJECT
                             // console.log(resultObject);
                             // console.log(resultObject.faces["0"].attributes.emotion);
 
