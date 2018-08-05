@@ -562,6 +562,7 @@
                 xhr.send(fd);
 
                 getPicFromDB();
+                getPicsForGallery();
 
             }else if (options.type === 'url') {
                 xhr.open('POST', API_URL + '/detect');
@@ -616,6 +617,7 @@
 
         // Add image names to array
         imageArray.push(imageName);
+        console.log(imageArray);
 
         //Upload a File
         var task = storageRef.put(blob);
@@ -630,7 +632,7 @@
         var storageRef = storage.ref();
         // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
 
-        storageRef.child('Emotion Photos/Adam_Image0').getDownloadURL().then(function(url) {
+        storageRef.child('Emotion Photos/image_0').getDownloadURL().then(function(url) {
             var responseBase64;
 
             var xhrFirebase = new XMLHttpRequest();
@@ -665,7 +667,7 @@
         var storageRef = storage.ref();
         // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
 
-        for(i=0; i<imageArray.length; i++){
+        for(var i=0; i<imageArray.length; i++){
             // cycle through and get back all image from the db
             // and also create and append new divs for photos
             // based on imageArray.
@@ -687,8 +689,15 @@
     
                     //create new divs with image same as bootstrap card.. then five it
                     //the image
+                    var galleryRow = $(".galleryRow");
     
-                    
+                    var parentDiv = $("<div>");
+                    parentDiv.attr("class", "col s12 m2");
+                    galleryRow.append(parentDiv);
+                    var cardDiv = $("<div>");
+                    cardDiv.attr("class", "card");
+                    parentDiv.append(cardDiv);
+                    //keep creating divs etc.
 
                     // var img = document.getElementById('myimg');
                     // img.src = responseBase64;
