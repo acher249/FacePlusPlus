@@ -601,10 +601,21 @@
         });
     });
 
+    // make empty array for all images
+    // push image names into the array when you puysh them off to the database,
+    // so that we can grab the back from the db later.
+    var imageArray = [];
+
     function sendPicToDB(){
 
+        var imageName = "image_" + photoCounter;
+        console.log("image name: " + imageName);
+
         //Create Storage Ref --- give it a file name
-        var storageRef = firebase.storage().ref("Emotion Photos/" + ("Adam_Image" + photoCounter));
+        var storageRef = firebase.storage().ref("Emotion Photos/" + imageName);
+
+        // Add image names to array
+        imageArray.push(imageName);
 
         //Upload a File
         var task = storageRef.put(blob);
@@ -643,7 +654,57 @@
         // Handle any errors
         });
 
+    }    
+    
+    // get back all images from db 
+    function getPicsForGallery(){
+
+        var storage = firebase.storage();
+
+        // Create a storage reference from our storage service
+        var storageRef = storage.ref();
+        // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
+
+        for(i=0; i<imageArray.length; i++){
+            // cycle through and get back all image from the db
+            // and also create and append new divs for photos
+            // based on imageArray.
+
+            storageRef.child('Emotion Photos/' + imageArray[i]).getDownloadURL().then(function(url) {
+                var responseBase64;
+    
+                var xhrFirebase = new XMLHttpRequest();
+                //want to get text back not a blob
+                xhrFirebase.responseType = 'text';
+                xhrFirebase.onload = function(event) {
+                    //This is the base64 string back from the db
+                    responseBase64 = xhrFirebase.response;
+                    // console.log(responseBase64);
+    
+                    // ADD base64 from Database to HTML HERE*****
+                    // This is a sequence issue.. image will be undefined 
+                    // if you do not wait until you get back the base 64 from the db
+    
+                    //create new divs with image same as bootstrap card.. then five it
+                    //the image
+    
+                    
+
+                    // var img = document.getElementById('myimg');
+                    // img.src = responseBase64;
+                };
+                xhrFirebase.open('GET', url);
+                xhrFirebase.send();
+    
+            }).catch(function(error) {
+            // Handle any errors
+            });
+        }
+
+
+
     }
+
     
     //#region  Need this function but not doing anything..
     $(function() {
