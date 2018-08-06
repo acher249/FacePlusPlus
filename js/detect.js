@@ -561,7 +561,7 @@
                 photoCounter++;
                 xhr.send(fd);
 
-                getPicFromDB();
+                // getPicFromDB();
                 getPicsForGallery();
 
             }else if (options.type === 'url') {
@@ -624,41 +624,43 @@
 
     }
 
-    function getPicFromDB(){
+    //GET BACK ONE SPECIFIC IMAGE FROM DB THEN SEND IT SOMEWHERE
+    //SPECIFIC IN THE DOM..
+    // function getPicFromDB(){
 
-        var storage = firebase.storage();
+    //     var storage = firebase.storage();
 
-        // Create a storage reference from our storage service
-        var storageRef = storage.ref();
-        // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
+    //     // Create a storage reference from our storage service
+    //     var storageRef = storage.ref();
+    //     // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
 
-        storageRef.child('Emotion Photos/image_0').getDownloadURL().then(function(url) {
-            var responseBase64;
+    //     storageRef.child('Emotion Photos/image_0').getDownloadURL().then(function(url) {
+    //         var responseBase64;
 
-            var xhrFirebase = new XMLHttpRequest();
-            //want to get text back not a blob
-            xhrFirebase.responseType = 'text';
-            xhrFirebase.onload = function(event) {
-                //This is the base64 string back from the db
-                responseBase64 = xhrFirebase.response;
-                // console.log(responseBase64);
+    //         var xhrFirebase = new XMLHttpRequest();
+    //         //want to get text back not a blob
+    //         xhrFirebase.responseType = 'text';
+    //         xhrFirebase.onload = function(event) {
+    //             //This is the base64 string back from the db
+    //             responseBase64 = xhrFirebase.response;
+    //             // console.log(responseBase64);
 
-                // ADD base64 from Database to HTML HERE*****
-                // This is a sequence issue.. image will be undefined 
-                // if you do not wait until you get back the base 64 from the db
-                var img = document.getElementById('myimg');
-                img.src = responseBase64;
-            };
-            xhrFirebase.open('GET', url);
-            xhrFirebase.send();
+    //             // ADD base64 from Database to HTML HERE*****
+    //             // This is a sequence issue.. image will be undefined 
+    //             // if you do not wait until you get back the base 64 from the db
+    //             var img = document.getElementById('myimg');
+    //             img.src = responseBase64;
+    //         };
+    //         xhrFirebase.open('GET', url);
+    //         xhrFirebase.send();
 
-        }).catch(function(error) {
-        // Handle any errors
-        });
+    //     }).catch(function(error) {
+    //     // Handle any errors
+    //     });
 
-    }    
+    // }    
     
-    // get back all images from db 
+    // GET BACK ALL THE IMAGES THAT ARE IN THE imagesArray.
     function getPicsForGallery(){
 
         var storage = firebase.storage();
@@ -667,6 +669,9 @@
         var storageRef = storage.ref();
         // var pathReference = storage.ref('Emotion Photos/Adam_Image0');
 
+        //********************       FIX THIS       ****************************** */
+        //everytime you add a picture it is going to loop through the entire list.
+        // We should get the list from the db.. not make the list here.
         for(var i=0; i<imageArray.length; i++){
             // cycle through and get back all image from the db
             // and also create and append new divs for photos
@@ -697,7 +702,22 @@
                     var cardDiv = $("<div>");
                     cardDiv.attr("class", "card");
                     parentDiv.append(cardDiv);
-                    //keep creating divs etc.
+                    var cardImageDiv = $("<div>");
+                    cardImageDiv.attr("class", "card-image");
+                    cardDiv.append(cardImageDiv);
+                    var imgTag = $("<img>");
+                    //give it an id to find later
+                    imgTag.attr("id", imageArray[i]);
+                    //give it the base64 string from db
+                    imgTag.attr("src", responseBase64);
+                    cardImageDiv.append(imgTag);
+                    var cardTitleDiv = $("<div>");
+                    cardTitleDiv.attr("class", "card-title");
+                    cardTitleDiv.attr("style", "font-size: 16px;");
+                    //give the card some text
+                    cardTitleDiv.text(imageArray[i]);
+                    cardImageDiv.append(cardTitleDiv);
+
 
                     // var img = document.getElementById('myimg');
                     // img.src = responseBase64;
