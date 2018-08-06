@@ -661,6 +661,8 @@
     // }    
     
     // GET BACK ALL THE IMAGES THAT ARE IN THE imagesArray.
+    // should getthe list back from the db.
+    // could make this not loop through entire array and just create new div for the new image
     function getPicsForGallery(){
 
         var storage = firebase.storage();
